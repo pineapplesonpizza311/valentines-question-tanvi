@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Just One Quiz ❤️</title>
+
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+h1 {
+  margin-top: 90px;
+  color: #c9184a;
+  font-size: 2.6rem;
+}
+
+h2 {
+  color: #6a040f;
+}
+
+.options {
+  margin-top: 40px;
+}
+
+button {
+  font-size: 20px;
+  padding: 14px 26px;
+  margin: 10px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.yes {
+  background: #ff4d6d;
+  color: white;
+  transition: transform 0.2s ease;
+}
+
+.wrong {
+  background: #adb5bd;
+  color: white;
+}
+
+.no {
+  background: #6c757d;
+  color: white;
+  position: absolute;
+}
+
+/* FLOATING HEARTS */
+.heart {
+  position: fixed;
+  bottom: -10px;
+  font-size: 24px;
+  animation: floatUp linear infinite;
+}
+
+@keyframes floatUp {
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(-120vh); opacity: 0; }
+}
+
+/* CONFETTI + HEART EXPLOSION */
+.confetti, .boom-heart {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  pointer-events: none;
+}
+
+.confetti {
+  width: 10px;
+  height: 10px;
+  animation: confettiFall 2.5s ease-out forwards;
+}
+
+@keyframes confettiFall {
+  to {
+    transform: translate(var(--x), var(--y)) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.boom-heart {
+  font-size: 28px;
+  animation: heartBoom 2.5s ease-out forwards;
+}
+
+@keyframes heartBoom {
+  to {
+    transform: translate(var(--x), var(--y)) scale(2);
+    opacity: 0;
+  }
+}
+
+/* PHOTO */
+.photo {
+  width: 280px;
+  max-width: 80%;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+  margin-top: 30px;
+  animation: fadeIn 1.5s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+</style>
+</head>
+
+<body>
+
+<div id="content">
+  <h1>Can I ask you a few questions… ❤️</h1>
+  <div class="options">
+    <button class="wrong" onclick="wrong()">No</button>
+    <button class="yes" onclick="q1()">Yes</button>
+  </div>
+</div>
+
+<!-- BACKGROUND MUSIC -->
+<audio id="music" loop>
+  <source src="bg_music.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+/* START BACKGROUND MUSIC AFTER FIRST CLICK */
+document.body.addEventListener('click', () => {
+  const bg = document.getElementById("music");
+  bg.volume = 0.3;
+  bg.currentTime = 20;
+  bg.play().catch(()=>{});
+}, { once: true });
+
+function wrong() {
+  alert("Hmm… try again 😌");
+}
+
+/* QUESTION 1 */
+function q1() {
+  document.getElementById("content").innerHTML = `
+    <h1>Can I ask you a few questions… ❤️</h1>
+    <h2>How much do I love you?</h2>
+
+    <div class="options">
+      <button class="wrong" onclick="wrong()">A lot</button>
+      <button class="wrong" onclick="wrong()">More than words</button>
+      <button class="yes" onclick="q2()">Infinite ♾️</button>
+    </div>
+  `;
+}
+
+/* QUESTION 2 */
+function q2() {
+  document.getElementById("content").innerHTML = `
+    <h1>One more 💕</h1>
+    <h2>What are you to me?</h2>
+
+    <div class="options">
+      <button class="wrong" onclick="wrong()">My favourite person</button>
+      <button class="wrong" onclick="wrong()">My safe place</button>
+      <button class="yes" onclick="finalQ()">My home, my everything ❤️</button>
+    </div>
+  `;
+}
+
+/* FINAL QUESTION */
+function finalQ() {
+  document.getElementById("content").innerHTML = `
+    <h1>Last one 💌</h1>
+    <h2>Will you be my Valentine?</h2>
+
+    <div class="options">
+      <button class="yes" id="yesBtn" onclick="yesClicked()">YES 💕</button>
+      <button class="no" id="noBtn">No 🙃</button>
+    </div>
+  `;
+
+  const noBtn = document.getElementById("noBtn");
+  const yesBtn = document.getElementById("yesBtn");
+  let scale = 1;
+
+  function moveNo() {
+    noBtn.style.left = Math.random() * (window.innerWidth - 120) + "px";
+    noBtn.style.top = Math.random() * (window.innerHeight - 60) + "px";
+    scale += 0.15;
+    yesBtn.style.transform = `scale(${scale})`;
+  }
+
+  noBtn.addEventListener("mouseover", moveNo);
+  noBtn.addEventListener("touchstart", moveNo);
+}
+
+/* YES CLICK */
+function yesClicked() {
+  const bg = document.getElementById("music");
+  if (bg) bg.pause();
+
+  document.body.innerHTML = `
+    <h1 style="margin-top:80px;">YAYYYY 😍💖</h1>
+    <h2>You’re my Valentine ❤️</h2>
+
+    <img src="IMG_6254.jpg" class="photo">
+
+    <h2>I love you bohot sara meri jaan ❤️</h2>
+
+    <audio id="yesMusic">
+      <source src="yes_click.mp3" type="audio/mpeg">
+    </audio>
+  `;
+
+  const yesMusic = document.getElementById("yesMusic");
+  yesMusic.volume = 0.7;
+  yesMusic.currentTime = 54;
+  yesMusic.play().catch(()=>{});
+
+  explode();
+}
+
+/* CONFETTI + HEART EXPLOSION */
+function explode() {
+  for (let i = 0; i < 60; i++) {
+    const conf = document.createElement("div");
+    conf.className = "confetti";
+    conf.style.background =
+      ["#ff4d6d", "#ffd166", "#06d6a0", "#4dabf7"][Math.floor(Math.random()*4)];
+    conf.style.setProperty("--x", `${Math.random()*600-300}px`);
+    conf.style.setProperty("--y", `${Math.random()*600-300}px`);
+    document.body.appendChild(conf);
+
+    const heart = document.createElement("div");
+    heart.className = "boom-heart";
+    heart.innerHTML = "❤️";
+    heart.style.setProperty("--x", `${Math.random()*500-250}px`);
+    heart.style.setProperty("--y", `${Math.random()*500-250}px`);
+    document.body.appendChild(heart);
+
+    setTimeout(() => {
+      conf.remove();
+      heart.remove();
+    }, 2500);
+  }
+}
+
+/* FLOATING HEARTS */
+setInterval(() => {
+  const h = document.createElement("div");
+  h.className = "heart";
+  h.innerHTML = "❤️";
+  h.style.left = Math.random() * 100 + "vw";
+  h.style.animationDuration = (Math.random() * 2 + 2) + "s";
+  document.body.appendChild(h);
+  setTimeout(() => h.remove(), 5000);
+}, 250);
+</script>
+
+</body>
+</html>
